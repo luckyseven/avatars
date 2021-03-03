@@ -2,10 +2,11 @@ part of 'package:avatars/avatars.dart';
 
 class Avatar extends StatefulWidget {
 
+  final List<Source> sources;
   final String facebookId;
   final String gravatar;
 
-  Avatar({this.facebookId, this.gravatar});
+  Avatar({this.sources, this.facebookId, this.gravatar});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -17,41 +18,52 @@ class _AvatarState extends State<Avatar> {
   Source _source;
   AvatarData _avatarData;
 
-  bool loading = true;
+  bool found = false;
 
   @override
   void initState() {
-    super.initState();
-    if (this.widget.facebookId != null) {
-      _source = FacebookSource(this.widget.facebookId, '');
-    } else if (this.widget.gravatar != null) {
-      _source = GravatarSource(this.widget.gravatar);
-    }
-
-    _source.getAvatar(200).then((ad) {
-      _avatarData = ad;
-      loading = false;
-      setState(() {});
-    });
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildAvatar();
+    return _bestSource();
   }
 
-  Widget _buildAvatar() {
-    if (loading) {
-      return Text("Carica");
+  Widget _bestSource() {
+    if (found) {
+      // return CircleAvatar(
+      //   backgroundImage: CachedNetworkImageProvider(_avatarData.imageUrl),
+      //   backgroundColor: Colors.brown.shade800,
+      //   radius: 30,
+      //   onBackgroundImageError: (a, b) {
+      //     found = false;
+      //     setState(() {});
+      //   },
+      // );
+      return Image(image: CachedNetworkImageProvider(_avatarData.imageUrl));
     }
-    ImageProvider image = CachedNetworkImageProvider(_avatarData.imageUrl);
+    if (this.widget.sources.length > 0) {
+      Source current = this.widget.sources.first;
+      this.widget.sources.removeAt(0);
+
+      print("PROVO UNO");
+
+      current.getAvatar(200).then((ad) {
+        _avatarData = ad;
+        found = true;
+        setState(() {});
+      });
+    }
     return CircleAvatar(
-      backgroundImage: _avatarData.imageUrl != null ? image : null,
       backgroundColor: Colors.brown.shade800,
-      child: _avatarData.imageUrl != null ? null : Text("OK"),
+      child: _loader(),
       radius: 30,
     );
+  }
+
+  Widget _loader() {
+    return CircularProgressIndicator();
   }
 
 }
@@ -68,7 +80,7 @@ class FacebookSource implements Source {
 
   @override
   Future<AvatarData> getAvatar(int size) {
-    return Future.value(AvatarData(imageUrl: 'https://graph.facebook.com/$facebookId/picture?width=$size&height=$size'));
+    return Future.value(AvatarData(imageUrl: 'https://graphaaa.facebook.com/$facebookId/picture?width=$size&height=$size'));
   }
 }
 
