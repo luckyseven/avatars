@@ -41,7 +41,8 @@ class _AvatarState extends State<Avatar> {
       //     setState(() {});
       //   },
       // );
-      return Image(image: CachedNetworkImageProvider(_avatarData.imageUrl));
+      return Image.memory(_avatarData.imageBytes);
+      // return Image(image: CachedNetworkImageProvider(_avatarData.imageUrl));
     }
     if (this.widget.sources.length > 0) {
       Source current = this.widget.sources.first;
@@ -70,9 +71,27 @@ class _AvatarState extends State<Avatar> {
 
 abstract class Source {
   Future<AvatarData> getAvatar(int size);
+
+  Future<Uint8List> downloadImage(String url) {
+    Completer<Uint8List> completer = Completer();
+    HttpClient client = new HttpClient();
+    var _downloadData = List<int>();
+    client.getUrl(Uri.parse(url))
+        .then((HttpClientRequest request) {
+          return request.close();
+        })
+        .then((HttpClientResponse response) {
+          response.listen((d) => _downloadData.addAll(d),
+          onDone: () {
+            completer.complete(Uint8List.fromList(_downloadData));
+          }
+      );
+    });
+    return completer.future;
+  }
 }
 
-class FacebookSource implements Source {
+class FacebookSource extends Source {
   String facebookId;
   String appToken; // Since Sep 2020 you need to use an App Token to get user's profile pictures
 
@@ -80,11 +99,13 @@ class FacebookSource implements Source {
 
   @override
   Future<AvatarData> getAvatar(int size) {
+    return downloadImage('https://graphaaa.facebook.com/$facebookId/picture?width=$size&height=$size').then((bytes) => AvatarData(imageBytes: bytes));
     return Future.value(AvatarData(imageUrl: 'https://graphaaa.facebook.com/$facebookId/picture?width=$size&height=$size'));
   }
+
 }
 
-class GravatarSource implements Source {
+class GravatarSource extends Source {
   String identifier; // Mail or Hash
 
   GravatarSource(this.identifier);
@@ -96,14 +117,18 @@ class GravatarSource implements Source {
     if (!matcher.hasMatch(hash)) {
       hash = md5.convert(utf8.encode(identifier)).toString();
     }
+    return downloadImage('https://secure.gravatar.com/avatar/$hash?s=$size&d=404').then((bytes) => AvatarData(imageBytes: bytes));
+
     return Future.value(AvatarData(imageUrl: 'https://secure.gravatar.com/avatar/$hash?s=$size&d=404'));
   }
+
 }
 
 class AvatarData {
+  Uint8List imageBytes;
   String imageUrl;
   String name;
   String value;
 
-  AvatarData({this.imageUrl, this.name, this.value});
+  AvatarData({this.imageBytes, this.imageUrl, this.name, this.value});
 }
