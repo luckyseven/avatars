@@ -22,10 +22,13 @@ class Avatar extends StatefulWidget {
 
   final double elevation;
   final double radius;
-  
+  final double size;
+
   final AvatarShape shape;
 
-  Avatar({this.elevation = 0, this.name, this.radius = 50, this.shape, this.sources, this.value});
+  final Border border;
+
+  Avatar({this.border, this.elevation = 0, this.name, this.radius = 50, this.shape, this.size, this.sources, this.value});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -63,6 +66,10 @@ class _AvatarState extends State<Avatar> {
       child: Container(
         width: _shape.width,
         height: _shape.height,
+        decoration: BoxDecoration(
+            border: this.widget.border,
+            borderRadius: _shape.borderRadius
+        ),
         child: ClipRRect(
           borderRadius: _shape.borderRadius,
           child:  _avatar,
@@ -83,7 +90,8 @@ class _AvatarState extends State<Avatar> {
     }
     if (this.widget.name != null) {
       List<String> nameParts = this.widget.name.split(' ');
-      return _text(nameParts.map((p) => p.substring(0,1)).join('').substring(0,2));
+      String initials = nameParts.map((p) => p.substring(0, 1)).join('');
+      return _text(initials.substring(0, initials.length >= 2 ? 2 : initials.length));
     }
     if (this.widget.value != null) {
       return _text(this.widget.value);
@@ -98,20 +106,15 @@ class _AvatarState extends State<Avatar> {
 
   Widget _text(String text) {
     return Container(
-      width: _shape.width,
-      height: _shape.height,
       decoration: BoxDecoration(
-        color: Colors.orange
+        color: Colors.orange,
       ),
-      child: ClipRRect(
-        borderRadius: _shape.borderRadius,
-        child:  Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: this.widget.shape.height / 2
-            ),
+      child:  Center(
+        child: Text(
+          text,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: this.widget.shape.height / 2
           ),
         ),
       ),
