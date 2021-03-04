@@ -83,15 +83,39 @@ class _AvatarState extends State<Avatar> {
     }
     if (this.widget.name != null) {
       List<String> nameParts = this.widget.name.split(' ');
-      return Text(nameParts.map((p) => p.substring(0,1)).join('').substring(0,2), style: TextStyle(fontSize: 30),);
+      return _text(nameParts.map((p) => p.substring(0,1)).join('').substring(0,2));
     }
     if (this.widget.value != null) {
-      return Text(this.widget.value);
+      return _text(this.widget.value);
     }
   }
 
   Widget _loader() {
-    return CircularProgressIndicator();
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _text(String text) {
+    return Container(
+      width: _shape.width,
+      height: _shape.height,
+      decoration: BoxDecoration(
+        color: Colors.orange
+      ),
+      child: ClipRRect(
+        borderRadius: _shape.borderRadius,
+        child:  Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: this.widget.shape.height / 2
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
 }
