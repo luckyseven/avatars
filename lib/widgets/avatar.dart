@@ -3,8 +3,8 @@ part of 'package:avatars/avatars.dart';
 // TODO
 // Reorganize files
 // Enable cache with flutter_cache_manager with a boolean propery useCache
-// Add GestureDetector
-// Put Loader in main container
+// ***Add GestureDetector
+// ***Put Loader in main container
 // Custom loader
 // Builder
 // *** Set colors by name or value
@@ -45,10 +45,13 @@ class Avatar extends StatefulWidget {
   final Border border;
   final List<Color> placeholderColors;
 
+  final GestureTapCallback onTap;
+
   Avatar({
     this.border,
     this.elevation = 0,
     this.name,
+    this.onTap,
     this.radius = 50,
     this.shape,
     this.size,
@@ -191,14 +194,17 @@ class _AvatarState extends State<Avatar> {
   }
 
   Widget _baseAvatar(Widget _content) {
-    return Material(
-      type: MaterialType.circle,
-      color: Colors.transparent,
-      elevation: this.widget.elevation,
-      child: Container(
-        width: _shape.width,
-        height: _shape.height,
-        child: _content,
+    return GestureDetector(
+      onTap: this.widget.onTap,
+      child: Material(
+        type: MaterialType.circle,
+        color: Colors.transparent,
+        elevation: this.widget.elevation,
+        child: Container(
+          width: _shape.width,
+          height: _shape.height,
+          child: _content,
+        ),
       ),
     );
   }
