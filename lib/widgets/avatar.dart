@@ -3,6 +3,10 @@ part of 'package:avatars/avatars.dart';
 // TODO
 // Reorganize files
 // Enable cache with flutter_cache_manager with a boolean propery useCache
+// Add GestureDetector
+// Put Loader in main container
+// Custom loader
+// Builder
 // *** Set colors by name or value
 
 class AvatarShape {
@@ -117,15 +121,24 @@ class _AvatarState extends State<Avatar> {
   }
 
   Widget _loader() {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
+    return _baseAvatar(Container(
+      width: _shape.width,
+      height: _shape.height,
+      decoration: BoxDecoration(
+        border: this.widget.border,
+        borderRadius: _shape.borderRadius,
+        color: Colors.white
+      ),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ));
   }
 
   Widget _imageAvatar(ImageProvider avatar) {
-    return Container(
-      width: this.widget.shape.width,
-      height: this.widget.shape.height,
+    return _baseAvatar(Container(
+      width: _shape.width,
+      height: _shape.height,
       decoration: BoxDecoration(
         border: this.widget.border,
         borderRadius: _shape.borderRadius,
@@ -134,7 +147,7 @@ class _AvatarState extends State<Avatar> {
           fit: BoxFit.cover,
         ),
       ),
-    );
+    ));
   }
 
   Widget _textAvatar(String text) {
@@ -143,32 +156,48 @@ class _AvatarState extends State<Avatar> {
         .map((l) => l.codeUnitAt(0))
         .reduce((previous, current) => previous + current);
 
-    return _baseAvatar(
-        Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: this.widget.shape.height / 2,
-            ),
+    return _baseAvatar(Container(
+      width: _shape.width,
+      height: _shape.height,
+      decoration: BoxDecoration(
+        border: this.widget.border,
+        borderRadius: _shape.borderRadius,
+        color: this.widget.placeholderColors[
+                textCode % this.widget.placeholderColors.length] ??
+            Colors.black,
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: _shape.height / 2,
           ),
         ),
-        this.widget.placeholderColors[textCode % this.widget.placeholderColors.length] ?? Colors.black);
+      ),
+    ));
+
+    // return _baseAvatar(
+    //     Center(
+    //       child: Text(
+    //         text,
+    //         style: TextStyle(
+    //           color: Colors.white,
+    //           fontSize: _shape.height / 2,
+    //         ),
+    //       ),
+    //     ),
+    //     this.widget.placeholderColors[textCode % this.widget.placeholderColors.length] ?? Colors.black);
   }
 
-  Widget _baseAvatar(Widget _content, [Color color = Colors.transparent]) {
+  Widget _baseAvatar(Widget _content) {
     return Material(
       type: MaterialType.circle,
       color: Colors.transparent,
       elevation: this.widget.elevation,
       child: Container(
-        clipBehavior: Clip.hardEdge,
         width: _shape.width,
         height: _shape.height,
-        decoration: BoxDecoration(
-            border: this.widget.border,
-            borderRadius: _shape.borderRadius,
-            color: color),
         child: _content,
       ),
     );
