@@ -3,8 +3,7 @@ part of 'package:avatars/avatars.dart';
 // TODO
 // Reorganize files
 // Enable cache with flutter_cache_manager with a boolean propery useCache
-// Set colors by name or value
-//
+// *** Set colors by name or value
 
 class AvatarShape {
   double width;
@@ -149,12 +148,12 @@ class _AvatarState extends State<Avatar> {
           child: Text(
             text,
             style: TextStyle(
-              color: this.widget.placeholderColors[textCode % this.widget.placeholderColors.length] ?? Colors.black,
+              color: Colors.white,
               fontSize: this.widget.shape.height / 2,
             ),
           ),
         ),
-        Colors.orange);
+        this.widget.placeholderColors[textCode % this.widget.placeholderColors.length] ?? Colors.black);
   }
 
   Widget _baseAvatar(Widget _content, [Color color = Colors.transparent]) {
