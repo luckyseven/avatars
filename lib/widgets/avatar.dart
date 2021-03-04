@@ -40,6 +40,7 @@ class Avatar extends StatefulWidget {
   final Border border;
   final List<Color> placeholderColors;
   final Widget loader;
+  final bool useCache;
 
   final GestureTapCallback onTap;
 
@@ -51,6 +52,7 @@ class Avatar extends StatefulWidget {
     this.radius = 50,
     this.size,
     this.sources,
+    this.useCache = false,
     this.value,
     Widget loader,
     List<Color> placeholderColor,
@@ -102,7 +104,7 @@ class _AvatarState extends State<Avatar> {
 
     if (sources != null && sources.length > 0) {
       for (int i = 0; i < sources.length; i++) {
-        avatar = await sources.elementAt(i).getAvatar();
+        avatar = await sources.elementAt(i).getAvatar(this.widget.useCache);
         if (avatar != null) {
           return _imageAvatar(avatar);
         }
