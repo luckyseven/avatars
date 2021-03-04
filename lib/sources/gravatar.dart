@@ -4,7 +4,7 @@ class GravatarSource extends Source {
   String identifier; // Mail or Hash
   int size;
 
-  GravatarSource(this.identifier, [this.size = 500]);
+  GravatarSource(this.identifier, [this.size = 300]);
 
   @override
   String getAvatarUrl() {

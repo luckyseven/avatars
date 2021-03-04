@@ -1,7 +1,7 @@
 part of 'package:avatars/avatars.dart';
 
 class NetworkSource extends Source {
-  String url; // Mail or Hash
+  String url;
 
   NetworkSource(this.url);
 

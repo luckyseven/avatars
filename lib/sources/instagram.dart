@@ -4,34 +4,42 @@ class InstagramSource extends Source {
   String username;
   int size;
 
-  InstagramSource(this.username, [this.size = 500]);
+  InstagramSource(this.username, [this.size = 300]);
 
-  Future<Uint8List> _getImageBytes(String url) {
-
-    Map<String, dynamic> jsonResponse;
-
+  Future<Uint8List> _getImageBytes(String url) async {
     Completer<Uint8List> completer = Completer();
-    HttpClient client = new HttpClient();
-    var _downloadData = List<int>();
-    client.getUrl(Uri.parse(url)).then((HttpClientRequest request) {
-      return request.close();
-    }).then((HttpClientResponse response) {
+
+    try {
+      HttpClient client = new HttpClient();
+
+      HttpClientRequest request = await client.getUrl(Uri.parse(url));
+
+      request.headers.set('Content-Type', 'application/json');
+
+      HttpClientResponse response = await request.close();
 
       if (response.statusCode > 399) {
         completer.complete(null);
       } else {
-        response
-            .transform(utf8.decoder)
-            .transform(json.decoder)
-            .listen((c) => jsonResponse = c, onDone: () {
-           super._getImageBytes(jsonResponse['graphql']['user']['profile_pic_url_hd'] + '&s=$size').then((bytes) => completer.complete(bytes));
-        });
+        Map<String, dynamic> jsonResponse = {};
+        await for (var data in response.transform(utf8.decoder).transform(json.decoder)) {
+          jsonResponse.addAll(data);
+        }
+
+        Uint8List bytes = await super._getImageBytes('${jsonResponse['graphql']['user']['profile_pic_url_hd']}&s=$size');
+        if (bytes != null) {
+          completer.complete(Uint8List.fromList(bytes));
+        } else {
+          completer.complete(null);
+        }
       }
-    }).catchError((e) => completer.complete(null));
+    } catch (e) {
+      completer.complete(null);
+    }
+
     return completer.future;
   }
 
   @override
-  String getAvatarUrl() =>
-      'https://www.instagram.com/$username/?__a=1';
+  String getAvatarUrl() => 'https://www.instagram.com/$username/?__a=1';
 }

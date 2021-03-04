@@ -1,9 +1,5 @@
 part of 'package:avatars/avatars.dart';
 
-// TODO
-// Enable cache with flutter_cache_manager with a boolean propery useCache
-// Builder
-
 class AvatarShape {
   double width;
   double height;
@@ -55,19 +51,18 @@ class Avatar extends StatefulWidget {
     this.useCache = false,
     this.value,
     Widget loader,
-    List<Color> placeholderColor,
+    List<Color> placeholderColors,
     AvatarShape shape,
-  })
-      : this.placeholderColors = placeholderColor ??
-      [
-        Color(0xFF1abc9c),
-        Color(0xFFf1c40f),
-        Color(0xFF8e44ad),
-        Color(0xFFe74c3c),
-        Color(0xFFd35400),
-        Color(0xFF2c3e50),
-        Color(0xFF7f8c8d),
-      ],
+  })  : this.placeholderColors = placeholderColors ??
+            [
+              Color(0xFF1abc9c),
+              Color(0xFFf1c40f),
+              Color(0xFF8e44ad),
+              Color(0xFFe74c3c),
+              Color(0xFFd35400),
+              Color(0xFF2c3e50),
+              Color(0xFF7f8c8d),
+            ],
         this.shape = shape ?? AvatarShape.circle(50),
         this.loader = loader ?? Center(child: CircularProgressIndicator());
 
@@ -83,8 +78,7 @@ class _AvatarState extends State<Avatar> {
   @override
   void initState() {
     super.initState();
-    _buildBestAvatar().then((a) =>
-        setState(() {
+    _buildBestAvatar().then((a) => setState(() {
           _avatar = a;
           _loading = false;
         }));
@@ -116,9 +110,8 @@ class _AvatarState extends State<Avatar> {
       return _textAvatar(
           initials.substring(0, initials.length >= 2 ? 2 : initials.length));
     }
-    if (this.widget.value != null) {
-      return _textAvatar(this.widget.value);
-    }
+
+    return _textAvatar(this.widget.value ?? "");
   }
 
   Widget _loader() {
@@ -126,10 +119,9 @@ class _AvatarState extends State<Avatar> {
       width: this.widget.shape.width,
       height: this.widget.shape.height,
       decoration: BoxDecoration(
-        border: this.widget.border,
-        borderRadius: this.widget.shape.borderRadius,
-        color: Colors.white
-      ),
+          border: this.widget.border,
+          borderRadius: this.widget.shape.borderRadius,
+          color: Colors.white),
       child: this.widget.loader,
     ));
   }
