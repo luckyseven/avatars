@@ -10,6 +10,7 @@ import 'package:crypto/crypto.dart';
 
 part 'sources/source.dart';
 part 'sources/facebook.dart';
+part 'sources/github.dart';
 part 'sources/gravatar.dart';
 part 'sources/placeholder.dart';
 
