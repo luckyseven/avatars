@@ -59,6 +59,37 @@ class _AvatarState extends State<Avatar> {
     if (_loading) {
       return _loader();
     }
+    return _avatar;
+  }
+
+  Future<Widget> _buildBestAvatar() async {
+    Image avatar;
+    if (this.widget.sources != null && this.widget.sources.length > 0) {
+      for (int i = 0; i < this.widget.sources.length; i++) {
+        avatar = await this.widget.sources.elementAt(i).getAvatar();
+        if (avatar != null) {
+          return _imageAvatar(avatar);
+        }
+      }
+    }
+    if (this.widget.name != null) {
+      List<String> nameParts = this.widget.name.split(' ');
+      String initials = nameParts.map((p) => p.substring(0, 1)).join('');
+      return _textAvatar(initials.substring(0, initials.length >= 2 ? 2 : initials.length));
+    }
+    if (this.widget.value != null) {
+      return _textAvatar(this.widget.value);
+    }
+  }
+
+  Widget _loader() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+
+  Widget _imageAvatar(Widget avatar) {
     return Material(
       type: MaterialType.circle,
       color: Colors.transparent,
@@ -72,55 +103,42 @@ class _AvatarState extends State<Avatar> {
         ),
         child: ClipRRect(
           borderRadius: _shape.borderRadius,
-          child:  _avatar,
-        ),
-      ),
-    );
-  }
-
-  Future<Widget> _buildBestAvatar() async {
-    Image avatar;
-    if (this.widget.sources != null && this.widget.sources.length > 0) {
-      for (int i = 0; i < this.widget.sources.length; i++) {
-        avatar = await this.widget.sources.elementAt(i).getAvatar();
-        if (avatar != null) {
-          return avatar;
-        }
-      }
-    }
-    if (this.widget.name != null) {
-      List<String> nameParts = this.widget.name.split(' ');
-      String initials = nameParts.map((p) => p.substring(0, 1)).join('');
-      return _text(initials.substring(0, initials.length >= 2 ? 2 : initials.length));
-    }
-    if (this.widget.value != null) {
-      return _text(this.widget.value);
-    }
-  }
-
-  Widget _loader() {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget _text(String text) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.orange,
-      ),
-      child:  Center(
-        child: Text(
-          text,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: this.widget.shape.height / 2
+          child:  Container(
+            decoration: BoxDecoration(
+              color: Colors.orange,
+            ),
+            child: avatar,
           ),
         ),
       ),
     );
   }
 
+  Widget _textAvatar(String text) {
+    return Material(
+      type: MaterialType.circle,
+      color: Colors.transparent,
+      elevation: this.widget.elevation,
+      child: Container(
+        width: _shape.width,
+        height: _shape.height,
+        decoration: BoxDecoration(
+            border: this.widget.border,
+            borderRadius: _shape.borderRadius,
+            color: Colors.orange
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: this.widget.shape.height / 2
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 abstract class Source {
