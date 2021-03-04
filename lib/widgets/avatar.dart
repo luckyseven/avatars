@@ -1,5 +1,20 @@
 part of 'package:avatars/avatars.dart';
 
+class AvatarShape {
+  double width;
+  double height;
+  BorderRadius borderRadius;
+
+  static AvatarShape circle(double radius) => AvatarShape(width: radius * 2, height: radius * 2, borderRadius: BorderRadius.circular(radius));
+
+  static AvatarShape square(double size) => AvatarShape(width: size, height: size, borderRadius: BorderRadius.zero);
+
+  static AvatarShape roundedSquare(double size, double borderRadius) => AvatarShape(width: size, height: size, borderRadius: BorderRadius.circular(borderRadius));
+
+  AvatarShape({this.width, this.height, this.borderRadius});
+
+}
+
 class Avatar extends StatefulWidget {
   final List<Source> sources;
   final String name;
@@ -7,8 +22,10 @@ class Avatar extends StatefulWidget {
 
   final double elevation;
   final double radius;
+  
+  final AvatarShape shape;
 
-  Avatar({this.elevation = 0, this.name, this.radius = 50, this.sources, this.value});
+  Avatar({this.elevation = 0, this.name, this.radius = 50, this.shape, this.sources, this.value});
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -20,9 +37,14 @@ class _AvatarState extends State<Avatar> {
   bool _loading = true;
 
   Widget _avatar;
+  AvatarShape _shape;
 
   @override
   void initState() {
+    _shape = this.widget.shape;
+    if (_shape == null) {
+      _shape = AvatarShape.circle(50);
+    }
     _buildBestAvatar().then((a) => setState((){
       _avatar = a;
       _loading = false;
@@ -36,13 +58,13 @@ class _AvatarState extends State<Avatar> {
     }
     return Material(
       type: MaterialType.circle,
-      color: Colors.orange,
+      color: Colors.transparent,
       elevation: this.widget.elevation,
       child: Container(
-        width: this.widget.radius * 2,
-        height: this.widget.radius * 2,
+        width: _shape.width,
+        height: _shape.height,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(this.widget.radius),
+          borderRadius: _shape.borderRadius,
           child:  _avatar,
         ),
       ),
@@ -61,7 +83,7 @@ class _AvatarState extends State<Avatar> {
     }
     if (this.widget.name != null) {
       List<String> nameParts = this.widget.name.split(' ');
-      return Text(nameParts.map((p) => p.substring(0,1)).join('').substring(0,2));
+      return Text(nameParts.map((p) => p.substring(0,1)).join('').substring(0,2), style: TextStyle(fontSize: 30),);
     }
     if (this.widget.value != null) {
       return Text(this.widget.value);
