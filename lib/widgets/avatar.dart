@@ -1,13 +1,8 @@
 part of 'package:avatars/avatars.dart';
 
 // TODO
-// Reorganize files
 // Enable cache with flutter_cache_manager with a boolean propery useCache
-// ***Add GestureDetector
-// ***Put Loader in main container
-// Custom loader
 // Builder
-// *** Set colors by name or value
 
 class AvatarShape {
   double width;
@@ -44,6 +39,7 @@ class Avatar extends StatefulWidget {
 
   final Border border;
   final List<Color> placeholderColors;
+  final Widget loader;
 
   final GestureTapCallback onTap;
 
@@ -53,21 +49,25 @@ class Avatar extends StatefulWidget {
     this.name,
     this.onTap,
     this.radius = 50,
-    this.shape,
     this.size,
     this.sources,
     this.value,
+    Widget loader,
     List<Color> placeholderColor,
-  }) : this.placeholderColors = placeholderColor ??
-            [
-              Color(0xFF1abc9c),
-              Color(0xFFf1c40f),
-              Color(0xFF8e44ad),
-              Color(0xFFe74c3c),
-              Color(0xFFd35400),
-              Color(0xFF2c3e50),
-              Color(0xFF7f8c8d),
-            ];
+    AvatarShape shape,
+  })
+      : this.placeholderColors = placeholderColor ??
+      [
+        Color(0xFF1abc9c),
+        Color(0xFFf1c40f),
+        Color(0xFF8e44ad),
+        Color(0xFFe74c3c),
+        Color(0xFFd35400),
+        Color(0xFF2c3e50),
+        Color(0xFF7f8c8d),
+      ],
+        this.shape = shape ?? AvatarShape.circle(50),
+        this.loader = loader ?? Center(child: CircularProgressIndicator());
 
   @override
   _AvatarState createState() => _AvatarState();
@@ -77,16 +77,12 @@ class _AvatarState extends State<Avatar> {
   bool _loading = true;
 
   Widget _avatar;
-  AvatarShape _shape;
 
   @override
   void initState() {
     super.initState();
-    _shape = this.widget.shape;
-    if (_shape == null) {
-      _shape = AvatarShape.circle(50);
-    }
-    _buildBestAvatar().then((a) => setState(() {
+    _buildBestAvatar().then((a) =>
+        setState(() {
           _avatar = a;
           _loading = false;
         }));
@@ -125,26 +121,24 @@ class _AvatarState extends State<Avatar> {
 
   Widget _loader() {
     return _baseAvatar(Container(
-      width: _shape.width,
-      height: _shape.height,
+      width: this.widget.shape.width,
+      height: this.widget.shape.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: _shape.borderRadius,
+        borderRadius: this.widget.shape.borderRadius,
         color: Colors.white
       ),
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+      child: this.widget.loader,
     ));
   }
 
   Widget _imageAvatar(ImageProvider avatar) {
     return _baseAvatar(Container(
-      width: _shape.width,
-      height: _shape.height,
+      width: this.widget.shape.width,
+      height: this.widget.shape.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: _shape.borderRadius,
+        borderRadius: this.widget.shape.borderRadius,
         image: DecorationImage(
           image: avatar,
           fit: BoxFit.cover,
@@ -160,11 +154,11 @@ class _AvatarState extends State<Avatar> {
         .reduce((previous, current) => previous + current);
 
     return _baseAvatar(Container(
-      width: _shape.width,
-      height: _shape.height,
+      width: this.widget.shape.width,
+      height: this.widget.shape.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: _shape.borderRadius,
+        borderRadius: this.widget.shape.borderRadius,
         color: this.widget.placeholderColors[
                 textCode % this.widget.placeholderColors.length] ??
             Colors.black,
@@ -174,23 +168,11 @@ class _AvatarState extends State<Avatar> {
           text,
           style: TextStyle(
             color: Colors.white,
-            fontSize: _shape.height / 2,
+            fontSize: this.widget.shape.height / 2,
           ),
         ),
       ),
     ));
-
-    // return _baseAvatar(
-    //     Center(
-    //       child: Text(
-    //         text,
-    //         style: TextStyle(
-    //           color: Colors.white,
-    //           fontSize: _shape.height / 2,
-    //         ),
-    //       ),
-    //     ),
-    //     this.widget.placeholderColors[textCode % this.widget.placeholderColors.length] ?? Colors.black);
   }
 
   Widget _baseAvatar(Widget _content) {
@@ -201,8 +183,8 @@ class _AvatarState extends State<Avatar> {
         color: Colors.transparent,
         elevation: this.widget.elevation,
         child: Container(
-          width: _shape.width,
-          height: _shape.height,
+          width: this.widget.shape.width,
+          height: this.widget.shape.height,
           child: _content,
         ),
       ),
