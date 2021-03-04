@@ -12,6 +12,7 @@ part 'sources/source.dart';
 part 'sources/facebook.dart';
 part 'sources/github.dart';
 part 'sources/gravatar.dart';
+part 'sources/instagram.dart';
 part 'sources/placeholder.dart';
 
 part 'widgets/avatar.dart';
