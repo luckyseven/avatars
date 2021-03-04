@@ -63,7 +63,7 @@ class _AvatarState extends State<Avatar> {
   }
 
   Future<Widget> _buildBestAvatar() async {
-    Image avatar;
+    ImageProvider avatar;
     if (this.widget.sources != null && this.widget.sources.length > 0) {
       for (int i = 0; i < this.widget.sources.length; i++) {
         avatar = await this.widget.sources.elementAt(i).getAvatar();
@@ -89,45 +89,24 @@ class _AvatarState extends State<Avatar> {
   }
 
 
-  Widget _imageAvatar(Widget avatar) {
-    return Material(
-      type: MaterialType.circle,
-      color: Colors.transparent,
-      elevation: this.widget.elevation,
-      child: Container(
-        width: _shape.width,
-        height: _shape.height,
-        decoration: BoxDecoration(
-            border: this.widget.border,
-            borderRadius: _shape.borderRadius
-        ),
-        child: ClipRRect(
-          borderRadius: _shape.borderRadius,
-          child:  Container(
-            decoration: BoxDecoration(
-              color: Colors.orange,
-            ),
-            child: avatar,
-          ),
+  Widget _imageAvatar(ImageProvider avatar) {
+    return Container(
+      width: this.widget.shape.width,
+      height: this.widget.shape.height,
+      decoration: BoxDecoration(
+        border: this.widget.border,
+        borderRadius: _shape.borderRadius,
+        image: DecorationImage(
+          image: avatar,
+          fit: BoxFit.cover,
         ),
       ),
     );
   }
 
   Widget _textAvatar(String text) {
-    return Material(
-      type: MaterialType.circle,
-      color: Colors.transparent,
-      elevation: this.widget.elevation,
-      child: Container(
-        width: _shape.width,
-        height: _shape.height,
-        decoration: BoxDecoration(
-            border: this.widget.border,
-            borderRadius: _shape.borderRadius,
-            color: Colors.orange
-        ),
-        child: Center(
+    return _baseAvatar(
+        Center(
           child: Text(
             text,
             style: TextStyle(
@@ -135,7 +114,25 @@ class _AvatarState extends State<Avatar> {
                 fontSize: this.widget.shape.height / 2
             ),
           ),
+        )
+    , Colors.orange);
+  }
+
+  Widget _baseAvatar(Widget _content, [Color color = Colors.transparent]) {
+    return Material(
+      type: MaterialType.circle,
+      color: Colors.transparent,
+      elevation: this.widget.elevation,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        width: _shape.width,
+        height: _shape.height,
+        decoration: BoxDecoration(
+            border: this.widget.border,
+            borderRadius: _shape.borderRadius,
+            color: color
         ),
+        child: _content,
       ),
     );
   }
@@ -143,18 +140,18 @@ class _AvatarState extends State<Avatar> {
 
 abstract class Source {
   bool _cached = false;
-  Image _cache;
+  ImageProvider _cache;
 
   String getAvatarUrl();
 
-  Future<Image> getAvatar() {
+  Future<ImageProvider> getAvatar() {
     if (_cached) {
       return Future.value(_cache);
     }
     return _getImageBytes(getAvatarUrl()).then((bytes) {
       if (bytes != null) {
         _cached = true;
-        _cache = Image.memory(bytes);
+        _cache = MemoryImage(bytes);
         return _cache;
       }
       return null;
@@ -216,7 +213,7 @@ class GravatarSource extends Source {
 }
 
 class PlaceholderSource extends Source {
-  Image image; // Mail or Hash
+  ImageProvider image; // Mail or Hash
 
   PlaceholderSource(this.image);
 
@@ -224,6 +221,6 @@ class PlaceholderSource extends Source {
   String getAvatarUrl() => null;
 
   @override
-  Future<Image> getAvatar() => Future.value(image);
+  Future<ImageProvider> getAvatar() => Future.value(image);
 
 }
