@@ -4,6 +4,8 @@ A complete avatar widget with a **priority & fallback** system that allow to spe
 
 The widget will automatically find the best available image/text source among those provided.
 
+![Avatars examples](/screenshots/example.jpg)
+
 # Installation
 
 In your `pubspec.yaml` file within your Flutter Project: 
