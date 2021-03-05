@@ -34,6 +34,7 @@ class Avatar extends StatefulWidget {
   final AvatarShape shape;
 
   final Border border;
+  final Color backgroundColor;
   final List<Color> placeholderColors;
   final Widget loader;
   final bool useCache;
@@ -41,6 +42,7 @@ class Avatar extends StatefulWidget {
   final GestureTapCallback onTap;
 
   Avatar({
+    this.backgroundColor = Colors.transparent,
     this.border,
     this.elevation = 0,
     this.name,
@@ -119,9 +121,10 @@ class _AvatarState extends State<Avatar> {
       width: this.widget.shape.width,
       height: this.widget.shape.height,
       decoration: BoxDecoration(
-          border: this.widget.border,
-          borderRadius: this.widget.shape.borderRadius,
-          color: Colors.white),
+        border: this.widget.border,
+        borderRadius: this.widget.shape.borderRadius,
+        color: this.widget.backgroundColor,
+      ),
       child: this.widget.loader,
     ));
   }
@@ -133,6 +136,7 @@ class _AvatarState extends State<Avatar> {
       decoration: BoxDecoration(
         border: this.widget.border,
         borderRadius: this.widget.shape.borderRadius,
+        color: this.widget.backgroundColor,
         image: DecorationImage(
           image: avatar,
           fit: BoxFit.cover,
