@@ -22,11 +22,13 @@ class InstagramSource extends Source {
         completer.complete(null);
       } else {
         Map<String, dynamic> jsonResponse = {};
-        await for (var data in response.transform(utf8.decoder).transform(json.decoder)) {
+        await for (var data
+            in response.transform(utf8.decoder).transform(json.decoder)) {
           jsonResponse.addAll(data);
         }
 
-        Uint8List bytes = await super._getImageBytes('${jsonResponse['graphql']['user']['profile_pic_url_hd']}&s=$size');
+        Uint8List bytes = await super._getImageBytes(
+            '${jsonResponse['graphql']['user']['profile_pic_url_hd']}&s=$size');
         if (bytes != null) {
           completer.complete(Uint8List.fromList(bytes));
         } else {

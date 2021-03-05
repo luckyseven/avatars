@@ -64,10 +64,11 @@ class Avatar extends StatefulWidget {
             ],
         this.shape = shape ?? AvatarShape.circle(50),
         this.loader = loader ?? Center(child: CircularProgressIndicator()),
-        this.textStyle = textStyle ?? TextStyle(
-          color: Colors.white,
-          fontSize: shape.height / 2,
-        );
+        this.textStyle = textStyle ??
+            TextStyle(
+              color: Colors.white,
+              fontSize: shape.height / 2,
+            );
   @override
   _AvatarState createState() => _AvatarState();
 }

@@ -19,11 +19,13 @@ class GitHubSource extends Source {
         completer.complete(null);
       } else {
         Map<String, dynamic> jsonResponse = {};
-        await for (var data in response.transform(utf8.decoder).transform(json.decoder)) {
+        await for (var data
+            in response.transform(utf8.decoder).transform(json.decoder)) {
           jsonResponse.addAll(data);
         }
 
-        Uint8List bytes = await super._getImageBytes(jsonResponse['avatar_url']);
+        Uint8List bytes =
+            await super._getImageBytes(jsonResponse['avatar_url']);
         if (bytes != null) {
           completer.complete(Uint8List.fromList(bytes));
         } else {
@@ -35,7 +37,6 @@ class GitHubSource extends Source {
     }
 
     return completer.future;
-
   }
 
   @override
