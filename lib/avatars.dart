@@ -22,6 +22,6 @@ part 'sources/instagram.dart';
 
 part 'sources/network.dart';
 
-part 'sources/local.dart';
+part 'sources/generic.dart';
 
 part 'widgets/avatar.dart';

@@ -1,9 +1,9 @@
 part of 'package:avatars/avatars.dart';
 
-class LocalSource extends Source {
+class GenericSource extends Source {
   ImageProvider image;
 
-  LocalSource(this.image);
+  GenericSource(this.image);
 
   @override
   String getAvatarUrl() => null;

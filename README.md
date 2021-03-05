@@ -98,9 +98,9 @@ You can retrieve an image from any remote source.
   NetworkSource(String url)
 ```
 
-#### LocalSource
-LocalSource is generally used as a *jolly* image source: you can use any ImageProvider with it.
+#### GenericSource
+GenericSource is generally used as a *jolly* image source: you can pass an `ImageProvider()` to show a picture.
 ```dart
-  LocalSource(ImageProvider image)
+  GenericSource(ImageProvider image)
 ```
 
