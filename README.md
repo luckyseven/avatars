@@ -1,6 +1,6 @@
 # avatars
 
-A complete avatar widget with a **priority & fallback** system that allow to specify multiple image sources like socials (Facebook, Instagram, GitHub, Gravatar) and custom providers (assets and network) or to use text (name initials or custom values). 
+A complete avatar widget with a **priority & fallback** system which allows you to specify multiple image sources like socials (Facebook, Instagram, GitHub, Gravatar) and custom providers (assets and network) or to use text (name initials or custom values). 
 
 The widget will automatically find the best available image/text source among those provided.
 
@@ -119,7 +119,7 @@ You can pass an `AvatarShape()` object to the widget using the `shape` property.
   //...
    ```
 
-Here's a list of other parameters that allow you to change the appearance of your avatars:
+Here's a list of other parameters which allows you to change the appearance of your avatars:
 
 Parameter			| Type				| Default		| Description
 ---						| ---					| ---				| ---
