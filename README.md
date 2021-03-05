@@ -69,7 +69,7 @@ Here's the complete set of available image sources:
 
 #### FacebookSource
 Since Sep. 2020, to retrieve a user's profile picture by its ID from Facebook, you must make the request with an App Token or an Access Token.
-You can find more info [here](https://developers.facebook.com/docs/graph-api/reference/user/picture/).
+You can find more details [here](https://developers.facebook.com/docs/graph-api/reference/user/picture/).
 ```dart
   FacebookSource(String facebookId, String appToken, [int size = 300])
 ```
