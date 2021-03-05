@@ -28,15 +28,13 @@ class Avatar extends StatefulWidget {
   final String value;
 
   final double elevation;
-  final double radius;
-  final double size;
-
   final AvatarShape shape;
 
   final Border border;
   final Color backgroundColor;
   final List<Color> placeholderColors;
   final Widget loader;
+  final TextStyle textStyle;
   final bool useCache;
 
   final GestureTapCallback onTap;
@@ -47,14 +45,13 @@ class Avatar extends StatefulWidget {
     this.elevation = 0,
     this.name,
     this.onTap,
-    this.radius = 50,
-    this.size,
     this.sources,
     this.useCache = false,
     this.value,
     Widget loader,
     List<Color> placeholderColors,
     AvatarShape shape,
+    TextStyle textStyle,
   })  : this.placeholderColors = placeholderColors ??
             [
               Color(0xFF1abc9c),
@@ -66,8 +63,11 @@ class Avatar extends StatefulWidget {
               Color(0xFF7f8c8d),
             ],
         this.shape = shape ?? AvatarShape.circle(50),
-        this.loader = loader ?? Center(child: CircularProgressIndicator());
-
+        this.loader = loader ?? Center(child: CircularProgressIndicator()),
+        this.textStyle = textStyle ?? TextStyle(
+          color: Colors.white,
+          fontSize: shape.height / 2,
+        );
   @override
   _AvatarState createState() => _AvatarState();
 }
@@ -164,10 +164,7 @@ class _AvatarState extends State<Avatar> {
       child: Center(
         child: Text(
           text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: this.widget.shape.height / 2,
-          ),
+          style: this.widget.textStyle,
         ),
       ),
     ));
