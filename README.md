@@ -4,7 +4,7 @@ A complete avatar widget with a **priority & fallback** system which allows you 
 
 The widget will automatically find the best available image/text source among those provided.
 
-![Avatars examples](/screenshots/example.png)
+![Avatars examples](https://github.com/luckyseven/avatars/blob/master/screenshots/example.png?raw=true)
 
 # Installation
 
