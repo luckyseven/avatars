@@ -1,4 +1,4 @@
-## [2.0.2] - 6 March 2021.
+## [2.0.4] - 6 March 2021.
 
 * README.md table: wrong layout on pub.dev (but correct in other repositories like GitHub).
 

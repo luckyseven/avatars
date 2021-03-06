@@ -1,6 +1,6 @@
 # avatars
 
-[![pub package](https://img.shields.io/pub/v/share.svg)](https://pub.dev/packages/avatars)
+![Pub Version](https://img.shields.io/pub/v/avatars)
 
 A complete avatar widget with a **priority & fallback** system which allows you to specify multiple image sources like socials (Facebook, Instagram, GitHub, Gravatar) and custom providers (assets and network) or to use text (name initials or custom values). 
 
@@ -122,14 +122,14 @@ You can pass an `AvatarShape()` object to the widget using the `shape` property.
 Here's a list of other parameters which allows you to change the appearance of your avatars:
 
 
-| Parameter			| Type				| Default		| Description |
-| ---						| ---					| ---				| --- |
-| `backgroundColor`		| `Color`	| `Colors.transparent`		| The background color used when the image is loading and/or when you load a transparent PNG. |
-| `border`		| `Border`	| `null`		| You can pass a `Border` object here. Ex. `Border.all(color: Colors.blue, width: 3)`. |
-| `elevation`		| `double`		| `0`		| The standard Material elevation. |
-| `loader`		| `Widget`		| `Center(child: CircularProgressIndicator())`		| You can pass any custom Widget to replace the default loader. |
-| `shadowColor`		| `Color`		| If null then the ambient CardTheme's shadowColor is used. If that's null too, then the overall theme's ThemeData.shadowColor (default black) is used.		| The color to paint the shadow below the avatar. |
-| `textStyle`		| `TextStyle`		| `TextStyle(color: Colors.white, fontSize: height / 2);`		| The TextStyle used when your widget uses text values from `name` or `value` parameters. |
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `backgroundColor` | `Color` | `Colors.transparent` | The background color used when the image is loading and/or when you load a transparent PNG. |
+| `border` | `Border` | `null` | You can pass a `Border` object here. Ex. `Border.all(color: Colors.blue, width: 3)`. |
+| `elevation` | `double` | `0` | The standard Material elevation. |
+| `loader` | `Widget` | `Center(child: CircularProgressIndicator())` | You can pass any custom Widget to replace the default loader. |
+| `shadowColor` | `Color` | If null then the ambient CardTheme's shadowColor is used. If that's null too, then the overall theme's ThemeData.shadowColor (default black) is used. | The color to paint the shadow below the avatar. |
+| `textStyle` | `TextStyle` | `TextStyle(color: Colors.white, fontSize: height / 2);` | The TextStyle used when your widget uses text values from `name` or `value` parameters. |
 
 
 ## Gestures
