@@ -1,5 +1,7 @@
 # avatars
 
+[![pub package](https://img.shields.io/pub/v/share.svg)](https://pub.dev/packages/avatars)
+
 A complete avatar widget with a **priority & fallback** system which allows you to specify multiple image sources like socials (Facebook, Instagram, GitHub, Gravatar) and custom providers (assets and network) or to use text (name initials or custom values). 
 
 The widget will automatically find the best available image/text source among those provided.
