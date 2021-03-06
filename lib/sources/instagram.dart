@@ -24,10 +24,10 @@ class InstagramSource extends Source {
         Map<String, dynamic> jsonResponse = {};
         await for (var data
             in response.transform(utf8.decoder).transform(json.decoder)) {
-          jsonResponse.addAll(data);
+          jsonResponse.addAll(data as Map<String, dynamic>);
         }
 
-        Uint8List bytes = await super._getImageBytes(
+        Uint8List? bytes = await super._getImageBytes(
             '${jsonResponse['graphql']['user']['profile_pic_url_hd']}&s=$size');
         if (bytes != null) {
           completer.complete(Uint8List.fromList(bytes));

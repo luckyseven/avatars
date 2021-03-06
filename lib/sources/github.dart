@@ -6,7 +6,7 @@ class GitHubSource extends Source {
 
   GitHubSource(this.username, [this.size = 300]);
 
-  Future<Uint8List> _getImageBytes(String url) async {
+  Future<Uint8List?> _getImageBytes(String url) async {
     Completer<Uint8List> completer = Completer();
 
     try {
@@ -21,10 +21,10 @@ class GitHubSource extends Source {
         Map<String, dynamic> jsonResponse = {};
         await for (var data
             in response.transform(utf8.decoder).transform(json.decoder)) {
-          jsonResponse.addAll(data);
+          jsonResponse.addAll(data as Map<String, dynamic>);
         }
 
-        Uint8List bytes =
+        Uint8List? bytes =
             await super._getImageBytes(jsonResponse['avatar_url']);
         if (bytes != null) {
           completer.complete(Uint8List.fromList(bytes));

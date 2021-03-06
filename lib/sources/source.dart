@@ -1,30 +1,34 @@
 part of 'package:avatars/avatars.dart';
 
 abstract class Source {
-  String getAvatarUrl();
+  String? getAvatarUrl();
 
-  Future<ImageProvider> getAvatar([bool useCache = false]) async {
+  Future<ImageProvider?> getAvatar([bool useCache = false]) async {
     try {
-      FileInfo cached =
-          await DefaultCacheManager().getFileFromCache(getAvatarUrl());
-      if (useCache && cached != null) {
-        return MemoryImage(cached.file.readAsBytesSync());
+      FileInfo? cached;
+      if (getAvatarUrl() != null) {
+        cached = await DefaultCacheManager().getFileFromCache(getAvatarUrl()!);
+        if (useCache && cached != null) {
+          return MemoryImage(cached.file.readAsBytesSync());
+        }
       }
 
-      Uint8List bytes = await _getImageBytes(getAvatarUrl());
-      if (bytes != null) {
-        if (useCache) {
-          await DefaultCacheManager()
-              .putFile(getAvatarUrl(), bytes, maxAge: Duration(days: 7));
+      if (getAvatarUrl() != null) {
+        Uint8List? bytes = await _getImageBytes(getAvatarUrl()!);
+        if (bytes != null) {
+          if (useCache && getAvatarUrl() != null) {
+            await DefaultCacheManager()
+                .putFile(getAvatarUrl()!, bytes, maxAge: Duration(days: 7));
+          }
+          return MemoryImage(bytes);
         }
-        return MemoryImage(bytes);
       }
     } catch (e) {}
 
     return null;
   }
 
-  Future<Uint8List> _getImageBytes(String url) async {
+  Future<Uint8List?> _getImageBytes(String url) async {
     Completer<Uint8List> completer = Completer();
 
     try {

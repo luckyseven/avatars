@@ -6,7 +6,7 @@ class GenericSource extends Source {
   GenericSource(this.image);
 
   @override
-  String getAvatarUrl() => null;
+  String? getAvatarUrl() => null;
 
   @override
   Future<ImageProvider> getAvatar([bool useCache = false]) =>

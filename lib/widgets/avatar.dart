@@ -4,40 +4,43 @@ class AvatarShape {
   double width;
   double height;
   BorderRadius borderRadius;
+  ShapeBorder? shape;
 
   static AvatarShape circle(double radius) => AvatarShape(
       width: radius * 2,
       height: radius * 2,
-      borderRadius: BorderRadius.circular(radius));
+      borderRadius: BorderRadius.circular(radius),
+      shape: CircleBorder());
 
   static AvatarShape square(double size) =>
-      AvatarShape(width: size, height: size, borderRadius: BorderRadius.zero);
+      AvatarShape(width: size, height: size, borderRadius: BorderRadius.zero, shape: null);
 
   static AvatarShape roundedSquare(double size, double borderRadius) =>
       AvatarShape(
           width: size,
           height: size,
-          borderRadius: BorderRadius.circular(borderRadius));
+          borderRadius: BorderRadius.circular(borderRadius), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)));
 
-  AvatarShape({this.width, this.height, this.borderRadius});
+  AvatarShape(
+      {required this.width, required this.height, required this.borderRadius, required this.shape});
 }
 
 class Avatar extends StatefulWidget {
-  final List<Source> sources;
-  final String name;
-  final String value;
+  final List<Source>? sources;
+  final String? name;
+  final String? value;
 
-  final double elevation;
-  final AvatarShape shape;
+  final double? elevation;
+  final AvatarShape? shape;
 
-  final Border border;
+  final Border? border;
   final Color backgroundColor;
   final List<Color> placeholderColors;
-  final Widget loader;
+  final Widget? loader;
   final TextStyle textStyle;
   final bool useCache;
 
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   Avatar({
     this.backgroundColor = Colors.transparent,
@@ -48,10 +51,10 @@ class Avatar extends StatefulWidget {
     this.sources,
     this.useCache = false,
     this.value,
-    Widget loader,
-    List<Color> placeholderColors,
-    AvatarShape shape,
-    TextStyle textStyle,
+    Widget? loader,
+    List<Color>? placeholderColors,
+    AvatarShape? shape,
+    TextStyle? textStyle,
   })  : this.placeholderColors = placeholderColors ??
             [
               Color(0xFF1abc9c),
@@ -67,7 +70,7 @@ class Avatar extends StatefulWidget {
         this.textStyle = textStyle ??
             TextStyle(
               color: Colors.white,
-              fontSize: shape.height / 2,
+              fontSize: shape != null ? shape.height / 2 : 50,
             );
   @override
   _AvatarState createState() => _AvatarState();
@@ -76,7 +79,7 @@ class Avatar extends StatefulWidget {
 class _AvatarState extends State<Avatar> {
   bool _loading = true;
 
-  Widget _avatar;
+  Widget? _avatar;
 
   @override
   void initState() {
@@ -92,12 +95,12 @@ class _AvatarState extends State<Avatar> {
     if (_loading) {
       return _loader();
     }
-    return _avatar;
+    return _avatar!;
   }
 
   Future<Widget> _buildBestAvatar() async {
-    ImageProvider avatar;
-    List<Source> sources = this.widget.sources;
+    ImageProvider? avatar;
+    List<Source>? sources = this.widget.sources;
 
     if (sources != null && sources.length > 0) {
       for (int i = 0; i < sources.length; i++) {
@@ -108,7 +111,7 @@ class _AvatarState extends State<Avatar> {
       }
     }
     if (this.widget.name != null) {
-      List<String> nameParts = this.widget.name.split(' ');
+      List<String> nameParts = this.widget.name!.split(' ');
       String initials = nameParts.map((p) => p.substring(0, 1)).join('');
       return _textAvatar(
           initials.substring(0, initials.length >= 2 ? 2 : initials.length));
@@ -119,11 +122,11 @@ class _AvatarState extends State<Avatar> {
 
   Widget _loader() {
     return _baseAvatar(Container(
-      width: this.widget.shape.width,
-      height: this.widget.shape.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape.borderRadius,
+        borderRadius: this.widget.shape!.borderRadius,
         color: this.widget.backgroundColor,
       ),
       child: this.widget.loader,
@@ -132,11 +135,11 @@ class _AvatarState extends State<Avatar> {
 
   Widget _imageAvatar(ImageProvider avatar) {
     return _baseAvatar(Container(
-      width: this.widget.shape.width,
-      height: this.widget.shape.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape.borderRadius,
+        borderRadius: this.widget.shape!.borderRadius,
         color: this.widget.backgroundColor,
         image: DecorationImage(
           image: avatar,
@@ -153,14 +156,13 @@ class _AvatarState extends State<Avatar> {
         .reduce((previous, current) => previous + current);
 
     return _baseAvatar(Container(
-      width: this.widget.shape.width,
-      height: this.widget.shape.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape.borderRadius,
+        borderRadius: this.widget.shape!.borderRadius,
         color: this.widget.placeholderColors[
-                textCode % this.widget.placeholderColors.length] ??
-            Colors.black,
+                textCode % this.widget.placeholderColors.length],
       ),
       child: Center(
         child: Text(
@@ -174,15 +176,10 @@ class _AvatarState extends State<Avatar> {
   Widget _baseAvatar(Widget _content) {
     return GestureDetector(
       onTap: this.widget.onTap,
-      child: Material(
-        type: MaterialType.circle,
-        color: Colors.transparent,
+      child: Card(
         elevation: this.widget.elevation,
-        child: Container(
-          width: this.widget.shape.width,
-          height: this.widget.shape.height,
-          child: _content,
-        ),
+        shape: this.widget.shape!.shape,
+        child: _content,
       ),
     );
   }

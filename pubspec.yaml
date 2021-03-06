@@ -1,17 +1,17 @@
 name: avatars
 description: An avatar widget that uses the best available data source among those provided (social images, gravatar, name initials, custom)
-version: 1.0.2
+version: 2.0.0
 homepage: https://github.com/luckyseven/avatars
 repository: https://github.com/luckyseven/avatars
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  crypto: ^2.1.5
-  flutter_cache_manager: ^2.1.1
+  crypto: ^3.0.0
+  flutter_cache_manager: ^3.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
