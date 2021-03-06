@@ -1,3 +1,7 @@
+## [2.0.1] - 6 March 2021.
+
+* README.md table: wrong layout on pub.dev (but correct in other repositories like GitHub).
+
 ## [2.0.0] - 6 March 2021.
 
 * Null safety version.
