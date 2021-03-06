@@ -48,7 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Avatar(
               elevation: 3,
-              shape: AvatarShape.roundedSquare(100, 10),
+              shape: AvatarShape.rectangle(
+                  100, 100, BorderRadius.all(new Radius.circular(20.0))),
               name: 'Alberto Fecchi', // Uses name initials (up to two)
             ),
           ],

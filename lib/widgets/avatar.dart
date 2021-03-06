@@ -3,26 +3,23 @@ part of 'package:avatars/avatars.dart';
 class AvatarShape {
   double width;
   double height;
-  BorderRadius borderRadius;
-  ShapeBorder? shape;
+  RoundedRectangleBorder shapeBorder;
 
   static AvatarShape circle(double radius) => AvatarShape(
       width: radius * 2,
       height: radius * 2,
-      borderRadius: BorderRadius.circular(radius),
-      shape: CircleBorder());
+      shapeBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)));
 
-  static AvatarShape square(double size) =>
-      AvatarShape(width: size, height: size, borderRadius: BorderRadius.zero, shape: null);
-
-  static AvatarShape roundedSquare(double size, double borderRadius) =>
+  static AvatarShape rectangle(double width, double height,
+          [BorderRadius borderRadius = BorderRadius.zero]) =>
       AvatarShape(
-          width: size,
-          height: size,
-          borderRadius: BorderRadius.circular(borderRadius), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)));
+          width: width,
+          height: height,
+          shapeBorder: RoundedRectangleBorder(borderRadius: borderRadius));
 
   AvatarShape(
-      {required this.width, required this.height, required this.borderRadius, required this.shape});
+      {required this.width, required this.height, required this.shapeBorder});
 }
 
 class Avatar extends StatefulWidget {
@@ -37,6 +34,7 @@ class Avatar extends StatefulWidget {
   final Color backgroundColor;
   final List<Color> placeholderColors;
   final Widget? loader;
+  final Color? shadowColor;
   final TextStyle textStyle;
   final bool useCache;
 
@@ -48,6 +46,7 @@ class Avatar extends StatefulWidget {
     this.elevation = 0,
     this.name,
     this.onTap,
+    this.shadowColor,
     this.sources,
     this.useCache = false,
     this.value,
@@ -126,7 +125,7 @@ class _AvatarState extends State<Avatar> {
       height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape!.borderRadius,
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
         color: this.widget.backgroundColor,
       ),
       child: this.widget.loader,
@@ -139,7 +138,7 @@ class _AvatarState extends State<Avatar> {
       height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape!.borderRadius,
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
         color: this.widget.backgroundColor,
         image: DecorationImage(
           image: avatar,
@@ -160,9 +159,10 @@ class _AvatarState extends State<Avatar> {
       height: this.widget.shape!.height,
       decoration: BoxDecoration(
         border: this.widget.border,
-        borderRadius: this.widget.shape!.borderRadius,
-        color: this.widget.placeholderColors[
-                textCode % this.widget.placeholderColors.length],
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
+        color: this
+            .widget
+            .placeholderColors[textCode % this.widget.placeholderColors.length],
       ),
       child: Center(
         child: Text(
@@ -177,8 +177,9 @@ class _AvatarState extends State<Avatar> {
     return GestureDetector(
       onTap: this.widget.onTap,
       child: Card(
+        shadowColor: this.widget.shadowColor,
         elevation: this.widget.elevation,
-        shape: this.widget.shape!.shape,
+        shape: this.widget.shape!.shapeBorder,
         child: _content,
       ),
     );

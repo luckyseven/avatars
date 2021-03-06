@@ -108,14 +108,12 @@ GenericSource is generally used as a *jolly* image source: you can pass an `Imag
 
 ## Shape, dimension, border and color
 
-You can pass an `AvatarShape()` object to the widget using the `shape` property. For common shapes, the `AvatarShape` class provides helper methods like `circle(double radius)`, `square(double size)`, `roundedSquare(double size, double borderRadius)`:
+You can pass an `AvatarShape()` object to the widget using the `shape` property. The `AvatarShape` class provides two helper methods: `circle(double radius)` and `rectangle(double width, double height, [BorderRadius borderRadius = BorderRadius.zero])`.
 
    ```dart
   //...
-  Avatar(name: 'Alberto Fecchi', shape: AvatarShape(width: 50, height: 70, borderRadius: 10),
-  Avatar(name: 'Alberto Fecchi', shape: AvatarShape.circle(50),
-  Avatar(name: 'Alberto Fecchi', shape: AvatarShape.square(100),
-  Avatar(name: 'Alberto Fecchi', shape: AvatarShape.roundedSquare(100, 10),
+  Avatar(name: 'Alberto Fecchi', shape: AvatarShape.circle(50)),
+  Avatar(name: 'Alberto Fecchi', shape: AvatarShape.rectangle(100, 100, BorderRadius.all(new Radius.circular(20.0)))),
   //...
    ```
 
@@ -127,6 +125,7 @@ Parameter			| Type				| Default		| Description
 `border`		| `Border`	| `null`		| You can pass a `Border` object here. Ex. `Border.all(color: Colors.blue, width: 3)`.
 `elevation`		| `double`		| `0`		| The standard Material elevation.
 `loader`		| `Widget`		| `Center(child: CircularProgressIndicator())`		| You can pass any custom Widget to replace the default loader.
+`shadowColor`		| `Color`		| If null then the ambient CardTheme's shadowColor is used. If that's null too, then the overall theme's ThemeData.shadowColor (default black) is used.		| The color to paint the shadow below the avatar.
 `textStyle`		| `TextStyle`		| `TextStyle(color: Colors.white, fontSize: height / 2);`		| The TextStyle used when your widget uses text values from `name` or `value` parameters.
 
 ## Gestures
