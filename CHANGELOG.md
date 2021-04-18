@@ -1,3 +1,7 @@
+## [2.1.0] - 18 April 2021.
+
+* Fix an Unhandled Exception: setState() called after dispose(). 
+
 ## [2.0.4] - 6 March 2021.
 
 * README.md table: wrong layout on pub.dev (but correct in other repositories like GitHub).

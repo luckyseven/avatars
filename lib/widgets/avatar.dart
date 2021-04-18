@@ -83,10 +83,14 @@ class _AvatarState extends State<Avatar> {
   @override
   void initState() {
     super.initState();
-    _buildBestAvatar().then((a) => setState(() {
+    _buildBestAvatar().then((a) {
+      if (mounted) {
+        setState(() {
           _avatar = a;
           _loading = false;
-        }));
+        });
+      }
+    });
   }
 
   @override
