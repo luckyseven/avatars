@@ -6,9 +6,9 @@ abstract class Source {
   Future<ImageProvider?> getAvatar([bool useCache = false]) async {
     try {
       FileInfo? cached;
-      if (getAvatarUrl() != null) {
+      if (useCache && getAvatarUrl() != null) {
         cached = await DefaultCacheManager().getFileFromCache(getAvatarUrl()!);
-        if (useCache && cached != null) {
+        if (cached != null) {
           return MemoryImage(cached.file.readAsBytesSync());
         }
       }
