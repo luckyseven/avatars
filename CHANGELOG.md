@@ -1,3 +1,7 @@
+## [2.1.1] - 07 July 2021.
+
+* Small cache issue fixed. 
+
 ## [2.1.0] - 18 April 2021.
 
 * Fix an Unhandled Exception: setState() called after dispose(). 
