@@ -29,6 +29,7 @@ class Avatar extends StatefulWidget {
 
   final double? elevation;
   final AvatarShape? shape;
+  final EdgeInsetsGeometry? margin;
 
   final Border? border;
   final Color backgroundColor;
@@ -44,6 +45,7 @@ class Avatar extends StatefulWidget {
     this.backgroundColor = Colors.transparent,
     this.border,
     this.elevation = 0,
+    this.margin,
     this.name,
     this.onTap,
     this.shadowColor,
@@ -184,6 +186,7 @@ class _AvatarState extends State<Avatar> {
         shadowColor: this.widget.shadowColor,
         elevation: this.widget.elevation,
         shape: this.widget.shape!.shapeBorder,
+        margin: this.widget.margin,
         child: _content,
       ),
     );
