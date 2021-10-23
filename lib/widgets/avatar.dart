@@ -22,13 +22,14 @@ class AvatarShape {
       {required this.width, required this.height, required this.shapeBorder});
 }
 
-class Avatar extends StatefulWidget {
+class Avatar extends StatelessWidget {
   final List<Source>? sources;
   final String? name;
   final String? value;
 
   final double? elevation;
   final AvatarShape? shape;
+  final EdgeInsetsGeometry? margin;
 
   final Border? border;
   final Color backgroundColor;
@@ -44,6 +45,7 @@ class Avatar extends StatefulWidget {
     this.backgroundColor = Colors.transparent,
     this.border,
     this.elevation = 0,
+    this.margin,
     this.name,
     this.onTap,
     this.shadowColor,
@@ -71,79 +73,63 @@ class Avatar extends StatefulWidget {
               color: Colors.white,
               fontSize: shape != null ? shape.height / 2 : 50,
             );
-  @override
-  _AvatarState createState() => _AvatarState();
-}
-
-class _AvatarState extends State<Avatar> {
-  bool _loading = true;
-
-  Widget? _avatar;
-
-  @override
-  void initState() {
-    super.initState();
-    _buildBestAvatar().then((a) {
-      if (mounted) {
-        setState(() {
-          _avatar = a;
-          _loading = false;
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return _loader();
-    }
-    return _avatar!;
+    return FutureBuilder<Widget>(
+        future: _buildBestAvatar(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data!;
+          } else {
+            return _loader();
+          }
+        });
   }
 
   Future<Widget> _buildBestAvatar() async {
     ImageProvider? avatar;
-    List<Source>? sources = this.widget.sources;
+    List<Source>? sources = this.sources;
 
     if (sources != null && sources.length > 0) {
       for (int i = 0; i < sources.length; i++) {
-        avatar = await sources.elementAt(i).getAvatar(this.widget.useCache);
+        avatar = await sources.elementAt(i).getAvatar(this.useCache);
         if (avatar != null) {
           return _imageAvatar(avatar);
         }
       }
     }
-    if (this.widget.name != null) {
-      List<String> nameParts = this.widget.name!.split(' ');
+    if (this.name != null) {
+      List<String> nameParts = this.name!.split(' ');
       String initials = nameParts.map((p) => p.substring(0, 1)).join('');
       return _textAvatar(
           initials.substring(0, initials.length >= 2 ? 2 : initials.length));
     }
 
-    return _textAvatar(this.widget.value ?? "");
+    return _textAvatar(this.value ?? "");
   }
 
   Widget _loader() {
     return _baseAvatar(Container(
-      width: this.widget.shape!.width,
-      height: this.widget.shape!.height,
+      width: this.shape!.width,
+      height: this.shape!.height,
       decoration: BoxDecoration(
-        border: this.widget.border,
-        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
-        color: this.widget.backgroundColor,
+        border: this.border,
+        borderRadius: this.shape!.shapeBorder.borderRadius,
+        color: this.backgroundColor,
       ),
-      child: this.widget.loader,
+      child: this.loader,
     ));
   }
 
   Widget _imageAvatar(ImageProvider avatar) {
     return _baseAvatar(Container(
-      width: this.widget.shape!.width,
-      height: this.widget.shape!.height,
+      width: this.shape!.width,
+      height: this.shape!.height,
       decoration: BoxDecoration(
-        border: this.widget.border,
-        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
-        color: this.widget.backgroundColor,
+        border: this.border,
+        borderRadius: this.shape!.shapeBorder.borderRadius,
+        color: this.backgroundColor,
         image: DecorationImage(
           image: avatar,
           fit: BoxFit.cover,
@@ -159,19 +145,17 @@ class _AvatarState extends State<Avatar> {
         .reduce((previous, current) => previous + current);
 
     return _baseAvatar(Container(
-      width: this.widget.shape!.width,
-      height: this.widget.shape!.height,
+      width: this.shape!.width,
+      height: this.shape!.height,
       decoration: BoxDecoration(
-        border: this.widget.border,
-        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
-        color: this
-            .widget
-            .placeholderColors[textCode % this.widget.placeholderColors.length],
+        border: this.border,
+        borderRadius: this.shape!.shapeBorder.borderRadius,
+        color: this.placeholderColors[textCode % this.placeholderColors.length],
       ),
       child: Center(
         child: Text(
           text,
-          style: this.widget.textStyle,
+          style: this.textStyle,
         ),
       ),
     ));
@@ -179,11 +163,12 @@ class _AvatarState extends State<Avatar> {
 
   Widget _baseAvatar(Widget _content) {
     return GestureDetector(
-      onTap: this.widget.onTap,
+      onTap: this.onTap,
       child: Card(
-        shadowColor: this.widget.shadowColor,
-        elevation: this.widget.elevation,
-        shape: this.widget.shape!.shapeBorder,
+        shadowColor: this.shadowColor,
+        elevation: this.elevation,
+        shape: this.shape!.shapeBorder,
+        margin: this.margin,
         child: _content,
       ),
     );
