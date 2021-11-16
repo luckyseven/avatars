@@ -13,7 +13,7 @@ The widget will automatically find the best available image/text source among th
 In your `pubspec.yaml` file within your Flutter Project: 
          
     dependencies:
-       avatars: ^2.0.0
+       avatars: ^3.0.0
 
 # Usage
 

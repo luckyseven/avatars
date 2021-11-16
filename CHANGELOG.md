@@ -1,3 +1,7 @@
+## [3.0.1] - 16 Nov 2021.
+
+* Documentation update. 
+
 ## [3.0.0] - 16 Nov 2021.
 
 * `Avatar` widget inherits from `StatelessWidget` instead of `StatefulWidget`.
