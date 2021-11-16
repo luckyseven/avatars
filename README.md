@@ -128,6 +128,7 @@ Here's a list of other parameters which allows you to change the appearance of y
 | `border` | `Border` | `null` | You can pass a `Border` object here. Ex. `Border.all(color: Colors.blue, width: 3)`. |
 | `elevation` | `double` | `0` | The standard Material elevation. |
 | `loader` | `Widget` | `Center(child: CircularProgressIndicator())` | You can pass any custom Widget to replace the default loader. |
+| `margin` | `EdgeInsetsGeometry` | `null` | You can pass an `EdgeInsetsGeometry` to change default margins (inherited from `Card`). |
 | `shadowColor` | `Color` | If null then the ambient CardTheme's shadowColor is used. If that's null too, then the overall theme's ThemeData.shadowColor (default black) is used. | The color to paint the shadow below the avatar. |
 | `textStyle` | `TextStyle` | `TextStyle(color: Colors.white, fontSize: height / 2);` | The TextStyle used when your widget uses text values from `name` or `value` parameters. |
 

@@ -1,3 +1,7 @@
+## [2.2.1] - 16 Nov 2021.
+
+* Documentation update. 
+
 ## [2.2.0] - 01 Oct 2021.
 
 * New `margin` parameter. 
