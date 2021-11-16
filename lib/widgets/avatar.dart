@@ -45,7 +45,6 @@ class Avatar extends StatelessWidget {
     this.backgroundColor = Colors.transparent,
     this.border,
     this.elevation = 0,
-    this.margin,
     this.name,
     this.onTap,
     this.shadowColor,
@@ -56,6 +55,7 @@ class Avatar extends StatelessWidget {
     List<Color>? placeholderColors,
     AvatarShape? shape,
     TextStyle? textStyle,
+    EdgeInsetsGeometry? margin
   })  : this.placeholderColors = placeholderColors ??
             [
               Color(0xFF1abc9c),
@@ -68,6 +68,7 @@ class Avatar extends StatelessWidget {
             ],
         this.shape = shape ?? AvatarShape.circle(50),
         this.loader = loader ?? Center(child: CircularProgressIndicator()),
+        this.margin = margin ?? EdgeInsets.all(0),
         this.textStyle = textStyle ??
             TextStyle(
               color: Colors.white,

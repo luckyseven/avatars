@@ -1,3 +1,8 @@
+## [3.0.0] - 16 Nov 2021.
+
+* `Avatar` widget inherits from `StatelessWidget` instead of `StatefulWidget`.
+* Removed default inner margin/padding in `Avatar` widget.
+
 ## [2.2.1] - 16 Nov 2021.
 
 * Documentation update. 
