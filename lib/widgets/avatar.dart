@@ -41,22 +41,22 @@ class Avatar extends StatelessWidget {
 
   final GestureTapCallback? onTap;
 
-  Avatar({
-    this.backgroundColor = Colors.transparent,
-    this.border,
-    this.elevation = 0,
-    this.name,
-    this.onTap,
-    this.shadowColor,
-    this.sources,
-    this.useCache = false,
-    this.value,
-    Widget? loader,
-    List<Color>? placeholderColors,
-    AvatarShape? shape,
-    TextStyle? textStyle,
-    EdgeInsetsGeometry? margin
-  })  : this.placeholderColors = placeholderColors ??
+  Avatar(
+      {this.backgroundColor = Colors.transparent,
+      this.border,
+      this.elevation = 0,
+      this.name,
+      this.onTap,
+      this.shadowColor,
+      this.sources,
+      this.useCache = false,
+      this.value,
+      Widget? loader,
+      List<Color>? placeholderColors,
+      AvatarShape? shape,
+      TextStyle? textStyle,
+      EdgeInsetsGeometry? margin})
+      : this.placeholderColors = placeholderColors ??
             [
               Color(0xFF1abc9c),
               Color(0xFFf1c40f),

@@ -1,3 +1,7 @@
+## [3.0.2] - 17 Nov 2021.
+
+* Resolved format issue for pub.dev. 
+
 ## [3.0.1] - 16 Nov 2021.
 
 * Documentation update. 
