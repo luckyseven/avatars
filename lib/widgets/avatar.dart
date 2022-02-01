@@ -22,7 +22,7 @@ class AvatarShape {
       {required this.width, required this.height, required this.shapeBorder});
 }
 
-class Avatar extends StatelessWidget {
+class Avatar extends StatefulWidget {
   final List<Source>? sources;
   final String? name;
   final String? value;
@@ -76,61 +76,113 @@ class Avatar extends StatelessWidget {
             );
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-        future: _buildBestAvatar(),
-        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-          if (snapshot.hasData) {
-            return snapshot.data!;
-          } else {
-            return _loader();
-          }
+  State<Avatar> createState() => _AvatarState();
+}
+
+class _AvatarState extends State<Avatar> {
+  bool _loading = true;
+
+  Widget? _avatar;
+
+  @override
+  void initState() {
+    super.initState();
+    _buildBestAvatar().then((a) {
+      if (mounted) {
+        setState(() {
+          _avatar = a;
+          _loading = false;
         });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return _loader();
+    }
+    return _avatar!;
+  }
+
+  @override
+  void didUpdateWidget(covariant Avatar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    List<Source>? sources = this.widget.sources;
+    List<Source>? oldWidgetSources = oldWidget.sources;
+
+    if (sources != null && oldWidgetSources != null) {
+      final shouldRebuild = sources.length != oldWidgetSources.length ||
+          _didSourcesChange(sources, oldWidgetSources);
+
+      if (shouldRebuild) {
+        setState(() {
+          _loading = true;
+        });
+        _buildBestAvatar().then((a) {
+          setState(() {
+            _avatar = a;
+            _loading = false;
+          });
+        });
+      }
+    }
+  }
+
+  bool _didSourcesChange(List<Source> sources, List<Source> oldWidgetSources) {
+    for (var i = 0; i < sources.length; i++) {
+      if (sources[i].getAvatarUrl() != oldWidgetSources[i].getAvatarUrl()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   Future<Widget> _buildBestAvatar() async {
     ImageProvider? avatar;
-    List<Source>? sources = this.sources;
+    List<Source>? sources = this.widget.sources;
 
     if (sources != null && sources.length > 0) {
       for (int i = 0; i < sources.length; i++) {
-        avatar = await sources.elementAt(i).getAvatar(this.useCache);
+        avatar = await sources.elementAt(i).getAvatar(this.widget.useCache);
         if (avatar != null) {
           return _imageAvatar(avatar);
         }
       }
     }
-    if (this.name != null) {
-      List<String> nameParts = this.name!.split(' ');
+    if (this.widget.name != null) {
+      List<String> nameParts = this.widget.name!.split(' ');
       String initials = nameParts.map((p) => p.substring(0, 1)).join('');
       return _textAvatar(
           initials.substring(0, initials.length >= 2 ? 2 : initials.length));
     }
 
-    return _textAvatar(this.value ?? "");
+    return _textAvatar(this.widget.value ?? "");
   }
 
   Widget _loader() {
     return _baseAvatar(Container(
-      width: this.shape!.width,
-      height: this.shape!.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
-        border: this.border,
-        borderRadius: this.shape!.shapeBorder.borderRadius,
-        color: this.backgroundColor,
+        border: this.widget.border,
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
+        color: this.widget.backgroundColor,
       ),
-      child: this.loader,
+      child: this.widget.loader,
     ));
   }
 
   Widget _imageAvatar(ImageProvider avatar) {
     return _baseAvatar(Container(
-      width: this.shape!.width,
-      height: this.shape!.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
-        border: this.border,
-        borderRadius: this.shape!.shapeBorder.borderRadius,
-        color: this.backgroundColor,
+        border: this.widget.border,
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
+        color: this.widget.backgroundColor,
         image: DecorationImage(
           image: avatar,
           fit: BoxFit.cover,
@@ -146,17 +198,19 @@ class Avatar extends StatelessWidget {
         .reduce((previous, current) => previous + current);
 
     return _baseAvatar(Container(
-      width: this.shape!.width,
-      height: this.shape!.height,
+      width: this.widget.shape!.width,
+      height: this.widget.shape!.height,
       decoration: BoxDecoration(
-        border: this.border,
-        borderRadius: this.shape!.shapeBorder.borderRadius,
-        color: this.placeholderColors[textCode % this.placeholderColors.length],
+        border: this.widget.border,
+        borderRadius: this.widget.shape!.shapeBorder.borderRadius,
+        color: this
+            .widget
+            .placeholderColors[textCode % this.widget.placeholderColors.length],
       ),
       child: Center(
         child: Text(
           text,
-          style: this.textStyle,
+          style: this.widget.textStyle,
         ),
       ),
     ));
@@ -164,12 +218,12 @@ class Avatar extends StatelessWidget {
 
   Widget _baseAvatar(Widget _content) {
     return GestureDetector(
-      onTap: this.onTap,
+      onTap: this.widget.onTap,
       child: Card(
-        shadowColor: this.shadowColor,
-        elevation: this.elevation,
-        shape: this.shape!.shapeBorder,
-        margin: this.margin,
+        shadowColor: this.widget.shadowColor,
+        elevation: this.widget.elevation,
+        shape: this.widget.shape!.shapeBorder,
+        margin: this.widget.margin,
         child: _content,
       ),
     );
